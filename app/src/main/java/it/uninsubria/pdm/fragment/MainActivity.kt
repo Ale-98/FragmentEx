@@ -2,6 +2,7 @@ package it.uninsubria.pdm.fragment
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -16,15 +17,16 @@ class MainActivity : AppCompatActivity() {
 
         val tag = main_activity_layout.tag
 
-        if (tag.equals("large_screen")) {
-            button3.isEnabled = false
-            button4.isEnabled = false
-        } else {
-            val fr: Fragment = FragmentOne.getInstance()
-            val fm: FragmentManager = supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fm.beginTransaction()
-            fragmentTransaction.add(R.id.fragment_container, fr)
-            fragmentTransaction.commit()
+        when(tag) {
+            "large_screen" -> {
+                button3.isEnabled = false
+                button4.isEnabled = false
+            }
+            "normal_screen" -> {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, FragmentOne.getInstance()).commit()
+            }
+            else -> Log.v("ActivityMain", "Not supported screen size")
         }
     }
 
@@ -32,18 +34,12 @@ class MainActivity : AppCompatActivity() {
         when (view) {
 // replace FragmentOne with FragmentTwo
             button2 -> {
-                val fm: FragmentManager = supportFragmentManager
-                val fragmentTransaction = fm.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_container, FragmentTwo.getInstance())
-                fragmentTransaction.commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentTwo.getInstance()).commit()
             }
 
             button -> {
 // replace FragmentTwo with FragmentOne
-                val fm: FragmentManager = supportFragmentManager
-                val fragmentTransaction = fm.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_container, FragmentOne.getInstance())
-                fragmentTransaction.commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentOne.getInstance()).commit()
             }
         }
     }
